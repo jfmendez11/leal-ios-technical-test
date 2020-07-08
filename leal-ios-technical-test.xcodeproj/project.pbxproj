@@ -21,6 +21,8 @@
 		5801665324B5574C001013D3 /* TransactionInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5801665224B5574C001013D3 /* TransactionInfo.swift */; };
 		5801665524B55A89001013D3 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5801665424B55A89001013D3 /* DataManager.swift */; };
 		5801665724B585C7001013D3 /* TransacitonsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5801665624B585C7001013D3 /* TransacitonsViewController.swift */; };
+		5801665A24B632E4001013D3 /* TransactionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5801665824B632E4001013D3 /* TransactionCell.swift */; };
+		5801665B24B632E4001013D3 /* TransactionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5801665924B632E4001013D3 /* TransactionCell.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +42,8 @@
 		5801665224B5574C001013D3 /* TransactionInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionInfo.swift; sourceTree = "<group>"; };
 		5801665424B55A89001013D3 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		5801665624B585C7001013D3 /* TransacitonsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransacitonsViewController.swift; sourceTree = "<group>"; };
+		5801665824B632E4001013D3 /* TransactionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionCell.swift; sourceTree = "<group>"; };
+		5801665924B632E4001013D3 /* TransactionCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TransactionCell.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,6 +102,8 @@
 			isa = PBXGroup;
 			children = (
 				5801661F24B53904001013D3 /* Main.storyboard */,
+				5801665924B632E4001013D3 /* TransactionCell.xib */,
+				5801665824B632E4001013D3 /* TransactionCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -175,6 +181,7 @@
 			files = (
 				5801664524B54768001013D3 /* LaunchScreen.storyboard in Resources */,
 				5801662324B53904001013D3 /* Assets.xcassets in Resources */,
+				5801665B24B632E4001013D3 /* TransactionCell.xib in Resources */,
 				5801662124B53904001013D3 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -188,6 +195,7 @@
 			files = (
 				5801661E24B53904001013D3 /* LoginViewController.swift in Sources */,
 				5801665524B55A89001013D3 /* DataManager.swift in Sources */,
+				5801665A24B632E4001013D3 /* TransactionCell.swift in Sources */,
 				5801664C24B5565F001013D3 /* Branch.swift in Sources */,
 				5801665324B5574C001013D3 /* TransactionInfo.swift in Sources */,
 				5801665024B556ED001013D3 /* Transaction.swift in Sources */,

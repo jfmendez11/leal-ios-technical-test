@@ -6,7 +6,7 @@
 //  Copyright © 2020 Juan Felipe Méndez. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 // MARK: -Constants used across the app
 struct K {
@@ -23,10 +23,26 @@ struct K {
     static let loginToTransactions = "LoginToTransactions"
     
     /// Transaction Cell Reuse Identifier
-    static let transactionCell = "TransactionCell"
+    static let transactionCell = "TransactionCellId"
+    
+    /// Transaction Cell Nib Name
+    static let cellNibName = "TransactionCell"
     
     /// Menu Icon Button
     static let menuIcon = "list.bullet"
+    
+    /// Height for transaction cell when a particular user is selected
+    static let transactionCellHeightSingleUser: CGFloat = 80.0
+    
+    /// Height for transaction cell when all users are selected
+    static let transactionCellHeightAllUsers: CGFloat = 90.0
+    
+    /// Color palette for the app
+    struct ColorPelette {
+        static let brandYellow = #colorLiteral(red: 0.8257568479, green: 0.6739847064, blue: 0, alpha: 1)
+        static let grey = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+        static let black = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+    }
     
     /// User defaults Keys
     struct UserDefaultsKeys {

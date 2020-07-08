@@ -26,6 +26,8 @@ class TransacitonsViewController: UITableViewController {
         if let userId = UserDefaults.standard.string(forKey: K.UserDefaultsKeys.selectedUser) {
             transactionsDataManager.fetchData(from: "users/\(userId)/transactions")
         }
+        
+        tableView.register(UINib(nibName: K.cellNibName, bundle: nil), forCellReuseIdentifier: K.transactionCell)
     }
     
     // MARK: - Table view data source
@@ -42,10 +44,22 @@ class TransacitonsViewController: UITableViewController {
     
     // MARK: - Table view delegate
      override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: K.transactionCell, for: indexPath)
-        cell.textLabel?.text = transactions[indexPath.row].commerce.name
+        let transaciton = transactions[indexPath.row]
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: K.transactionCell, for: indexPath) as! TransactionCell
+        
+        cell.readImage.tintColor = transaciton.read ? K.ColorPelette.grey : K.ColorPelette.brandYellow
+        cell.commerceNameLabel.text = transaciton.commerce.name
+        cell.commerceBranchNameLabel.text = transaciton.branch.name
+        cell.createdDateLabel.text = transaciton.createdDate
+        cell.userNameLabel.isHidden = true
+        
         return cell
      }
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return K.transactionCellHeightSingleUser
+    }
     
     /*
      // Override to support conditional editing of the table view.

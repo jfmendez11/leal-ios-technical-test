@@ -99,7 +99,7 @@ extension LoginViewController: UIPickerViewDelegate {
         } else {
             let selectedUser = users[row-1]
             UserDefaults.standard.set(selectedUser.id, forKey: K.UserDefaultsKeys.selectedUser)
-        performSegue(withIdentifier: K.loginToTransactions, sender: self)
+            performSegue(withIdentifier: K.loginToTransactions, sender: self)
         }
     }
 }

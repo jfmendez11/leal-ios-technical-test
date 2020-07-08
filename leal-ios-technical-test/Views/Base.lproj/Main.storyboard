@@ -28,7 +28,7 @@
                                         </constraints>
                                     </imageView>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="a8L-sh-PwB">
-                                        <rect key="frame" x="32.5" y="336" width="349" height="232"/>
+                                        <rect key="frame" x="32.5" y="288" width="349" height="328"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="iOS Technical Test" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AxJ-Cv-6Fx">
                                                 <rect key="frame" x="0.0" y="0.0" width="349" height="40"/>
@@ -40,30 +40,30 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="XXw-5l-flO">
-                                                <rect key="frame" x="14.5" y="48" width="320" height="184"/>
+                                                <rect key="frame" x="14.5" y="48" width="320" height="280"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Selecciona un usuario" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="35z-fq-rHA">
-                                                        <rect key="frame" x="35.5" y="0.0" width="249" height="40"/>
+                                                        <rect key="frame" x="33" y="0.0" width="254.5" height="40"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="40" id="nOt-Tk-Zbo"/>
                                                         </constraints>
-                                                        <fontDescription key="fontDescription" name="NotoNastaliqUrdu-Bold" family="Noto Nastaliq Urdu" pointSize="24"/>
+                                                        <fontDescription key="fontDescription" name="KohinoorGujarati-Bold" family="Kohinoor Gujarati" pointSize="24"/>
                                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="T8N-WD-hDT">
-                                                        <rect key="frame" x="0.0" y="40" width="320" height="144"/>
+                                                        <rect key="frame" x="0.0" y="40" width="320" height="240"/>
                                                     </pickerView>
                                                 </subviews>
                                             </stackView>
                                         </subviews>
                                     </stackView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Made with 💛 by Juan Felipe" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9Lf-wM-zVF">
-                                        <rect key="frame" x="103.5" y="754" width="207.5" height="20"/>
+                                        <rect key="frame" x="97" y="754" width="220.5" height="20"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="20" id="H3u-tK-KTR"/>
                                         </constraints>
-                                        <fontDescription key="fontDescription" name="NotoNastaliqUrdu" family="Noto Nastaliq Urdu" pointSize="17"/>
+                                        <fontDescription key="fontDescription" name="KohinoorGujarati-Regular" family="Kohinoor Gujarati" pointSize="17"/>
                                         <color key="textColor" red="0.80156981949999995" green="0.6797078848" blue="0.0031544130760000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                         <nil key="highlightedColor"/>
                                     </label>
@@ -92,7 +92,7 @@
             </objects>
             <point key="canvasLocation" x="1472" y="111"/>
         </scene>
-        <!--Transactions-->
+        <!--Transacciones-->
         <scene sceneID="LLz-oX-0lO">
             <objects>
                 <tableViewController id="RHO-HH-xjJ" customClass="TransacitonsViewController" customModule="leal_ios_technical_test" customModuleProvider="target" sceneMemberID="viewController">
@@ -100,22 +100,12 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="808"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                        <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="TransactionCell" id="nhc-XP-Tc7">
-                                <rect key="frame" x="0.0" y="28" width="414" height="43.5"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="nhc-XP-Tc7" id="U4u-bL-Tyg">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                </tableViewCellContentView>
-                            </tableViewCell>
-                        </prototypes>
                         <connections>
                             <outlet property="dataSource" destination="RHO-HH-xjJ" id="t2b-pv-eBD"/>
                             <outlet property="delegate" destination="RHO-HH-xjJ" id="SsZ-Dl-Q1i"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Transactions" id="Tuh-ud-Vv5">
+                    <navigationItem key="navigationItem" title="Transacciones" id="Tuh-ud-Vv5">
                         <barButtonItem key="rightBarButtonItem" systemItem="refresh" id="rGs-5c-W2a"/>
                     </navigationItem>
                 </tableViewController>
