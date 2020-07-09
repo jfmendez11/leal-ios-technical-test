@@ -14,8 +14,12 @@ class TransacitonsViewController: UITableViewController {
     var transactionsDataManager = DataManager<[Transaction]>()
     var transactions: [Transaction] = []
     
+    //MARK: LifeCycle Methods
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //tableView.isHidden = true
+        tableView.separatorStyle = .none
         
         transactionsDataManager.delegate = self
         
@@ -30,81 +34,104 @@ class TransacitonsViewController: UITableViewController {
         tableView.register(UINib(nibName: K.cellNibName, bundle: nil), forCellReuseIdentifier: K.transactionCell)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        tableView.reloadData()
+    }
+    
+    //MARK: Actions
+    @IBAction func reloadPressed(_ sender: UIBarButtonItem) {
+        if let userId = UserDefaults.standard.string(forKey: K.UserDefaultsKeys.selectedUser) {
+            transactionsDataManager.fetchData(from: "users/\(userId)/transactions")
+        }
+    }
+    
+    
     // MARK: - Table view data source
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
         return 1
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return transactions.count
+        return transactions.count > 0 ? transactions.count + 1 : 0
     }
     
     // MARK: - Table view delegate
-     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let transaciton = transactions[indexPath.row]
-        
-        let cell = tableView.dequeueReusableCell(withIdentifier: K.transactionCell, for: indexPath) as! TransactionCell
-        
-        cell.readImage.tintColor = transaciton.read ? K.ColorPelette.grey : K.ColorPelette.brandYellow
-        cell.commerceNameLabel.text = transaciton.commerce.name
-        cell.commerceBranchNameLabel.text = transaciton.branch.name
-        cell.createdDateLabel.text = transaciton.createdDate
-        cell.userNameLabel.isHidden = true
-        
-        return cell
-     }
-    
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return K.transactionCellHeightSingleUser
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if indexPath.row < transactions.count {
+            let transaciton = transactions[indexPath.row]
+            
+            let cell = tableView.dequeueReusableCell(withIdentifier: K.transactionCell, for: indexPath) as! TransactionCell
+            
+            cell.readImage.tintColor = transaciton.read ? K.ColorPelette.grey : K.ColorPelette.brandYellow
+            cell.commerceNameLabel.text = transaciton.commerce.name
+            cell.commerceBranchNameLabel.text = transaciton.branch.name
+            cell.createdDateLabel.text = transaciton.createdDate.formatDateFromSelf(to: "MMMM dd, yyyy")
+            cell.userNameLabel.isHidden = true
+            
+            return cell
+        } else {
+            let cell = UITableViewCell()
+            cell.backgroundColor = .red
+            cell.textLabel?.text = "Borrar Todas"
+            cell.textLabel?.textAlignment = .center
+            cell.textLabel?.textColor = .white
+            cell.accessoryView = UIImageView(image: UIImage(systemName: "trash.fill"), highlightedImage: nil)
+            cell.accessoryView?.tintColor = .white
+            return cell
+        }
     }
     
-    /*
-     // Override to support conditional editing of the table view.
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if indexPath.row < transactions.count {
+            return K.transactionCellHeightSingleUser
+        } else {
+            return 30.0
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if indexPath.row < transactions.count {
+            transactions[indexPath.row].read = true
+            performSegue(withIdentifier: K.toTransactionInfo, sender: self)
+        } else {
+            UIView.transition(with: self.tableView,
+                              duration: 1,
+                              options: .transitionCrossDissolve,
+                              animations: {
+                                self.tableView.separatorStyle = .none
+                                self.transactions = []
+                                self.tableView.reloadData()
+                              },
+                              completion: nil
+            )
+        }
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
      override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-     // Return false if you do not want the specified item to be editable.
-     return true
+        if indexPath.row < transactions.count {
+            return true
+        } else {
+            return false
+        }
      }
-     */
     
-    /*
-     // Override to support editing the table view.
      override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-     if editingStyle == .delete {
-     // Delete the row from the data source
-     tableView.deleteRows(at: [indexPath], with: .fade)
-     } else if editingStyle == .insert {
-     // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+        if editingStyle == .delete {
+            transactions.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .fade)
+        }
      }
-     }
-     */
     
-    /*
-     // Override to support rearranging the table view.
-     override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-     
-     }
-     */
-    
-    /*
-     // Override to support conditional rearranging of the table view.
-     override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-     // Return false if you do not want the item to be re-orderable.
-     return true
-     }
-     */
-    
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using segue.destination.
-     // Pass the selected object to the new view controller.
-     }
-     */
+    // MARK: - Navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let destinationVC = segue.destination as! TransactionInfoViewController
+        if let indexPath = tableView.indexPathForSelectedRow {
+            destinationVC.transaction = transactions[indexPath.row]
+        }
+    }
     
 }
 
@@ -117,7 +144,15 @@ extension TransacitonsViewController: DataDelegate {
             transactions = transactionsArray
         }
         DispatchQueue.main.async {
-            self.tableView.reloadData()
+            UIView.transition(with: self.tableView,
+                              duration: 0.75,
+                              options: .transitionCrossDissolve,
+                              animations: {
+                                self.tableView.separatorStyle = .singleLine
+                                self.tableView.reloadData()
+                              },
+                              completion: nil
+            )
         }
     }
     

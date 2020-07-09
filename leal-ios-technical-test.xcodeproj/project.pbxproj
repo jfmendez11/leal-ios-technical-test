@@ -23,6 +23,7 @@
 		5801665724B585C7001013D3 /* TransacitonsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5801665624B585C7001013D3 /* TransacitonsViewController.swift */; };
 		5801665A24B632E4001013D3 /* TransactionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5801665824B632E4001013D3 /* TransactionCell.swift */; };
 		5801665B24B632E4001013D3 /* TransactionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5801665924B632E4001013D3 /* TransactionCell.xib */; };
+		5801665D24B65C82001013D3 /* TransactionInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5801665C24B65C82001013D3 /* TransactionInfoViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,6 +45,7 @@
 		5801665624B585C7001013D3 /* TransacitonsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransacitonsViewController.swift; sourceTree = "<group>"; };
 		5801665824B632E4001013D3 /* TransactionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionCell.swift; sourceTree = "<group>"; };
 		5801665924B632E4001013D3 /* TransactionCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TransactionCell.xib; sourceTree = "<group>"; };
+		5801665C24B65C82001013D3 /* TransactionInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionInfoViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,6 +96,7 @@
 			children = (
 				5801661D24B53904001013D3 /* LoginViewController.swift */,
 				5801665624B585C7001013D3 /* TransacitonsViewController.swift */,
+				5801665C24B65C82001013D3 /* TransactionInfoViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -194,6 +197,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5801661E24B53904001013D3 /* LoginViewController.swift in Sources */,
+				5801665D24B65C82001013D3 /* TransactionInfoViewController.swift in Sources */,
 				5801665524B55A89001013D3 /* DataManager.swift in Sources */,
 				5801665A24B632E4001013D3 /* TransactionCell.swift in Sources */,
 				5801664C24B5565F001013D3 /* Branch.swift in Sources */,

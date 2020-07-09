@@ -51,7 +51,7 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="12" id="siA-ok-Huh"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="KohinoorGujarati-Light" family="Kohinoor Gujarati" pointSize="15"/>
+                                <fontDescription key="fontDescription" name="KohinoorGujarati-Light" family="Kohinoor Gujarati" pointSize="13"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>

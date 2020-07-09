@@ -22,6 +22,9 @@ struct K {
     /// Loging to transactions segue identifier
     static let loginToTransactions = "LoginToTransactions"
     
+    /// Transactions to information segue identifier
+    static let toTransactionInfo = "TransactionInfo"
+    
     /// Transaction Cell Reuse Identifier
     static let transactionCell = "TransactionCellId"
     
@@ -47,5 +50,20 @@ struct K {
     /// User defaults Keys
     struct UserDefaultsKeys {
         static let selectedUser = "CurrentUserId"
+    }
+}
+
+extension String {
+    func formatDateFromSelf(to format: String) -> String? {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+        if let date = dateFormatter.date(from: self) {
+            let returnFormatter = DateFormatter()
+            returnFormatter.dateFormat = format
+            returnFormatter.locale = .current
+            return returnFormatter.string(from: date)
+        }
+        return nil
     }
 }
