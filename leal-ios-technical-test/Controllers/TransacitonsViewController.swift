@@ -30,8 +30,10 @@ class TransacitonsViewController: UITableViewController {
         /// NavBar setup
         navigationItem.hidesBackButton = true
         let menuImage = UIImage(systemName: K.menuIcon)
-        navigationItem.leftBarButtonItem = UIBarButtonItem(image: menuImage, style: .plain, target: self, action: nil)
-        navigationItem.setTitleLabel(with: "Transacciones de \(selectedUser?.name ?? "todos los usuarios")")
+        navigationItem.leftBarButtonItem = UIBarButtonItem(image: menuImage, style: .plain, target: self, action: #selector(sideBarMenuPressed))
+        //navigationItem.setTitleLabel(with: "Transacciones de \(selectedUser?.name ?? "todos los usuarios")")
+        title = "Transacciones de \(selectedUser?.name ?? "todos los usuarios")"
+        navigationController?.navigationBar.setupNavigationMultilineTitle(with: "Transacciones de \(selectedUser?.name ?? "todos los usuarios")")
         
         /// Fetch the user's transactions if there's a selected user - if not, fetch all the transactions
         if let userId = selectedUser?.id {
@@ -56,24 +58,23 @@ class TransacitonsViewController: UITableViewController {
     /// Fetch the users data again
     @IBAction func reloadPressed(_ sender: UIBarButtonItem) {
         // FIXME: Cache rollback to network
-        if let userId = UserDefaults.standard.string(forKey: K.UserDefaultsKeys.selectedUser) {
+        if let userId = selectedUser?.id {
             // GET: /users/{userId}/transactions
             transactionsDataManager.fetchData(from: "users/\(userId)/transactions")
+        } else {
+            transactionsDataManager.fetchData(from: "transactions")
         }
+    }
+    
+    @objc private func sideBarMenuPressed() {
+        performSegue(withIdentifier: K.goToSidebar, sender: self)
     }
     
     
     // MARK: - Table view data source
-    
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return transactions.count > 0 ? transactions.count + 1 : 0
     }
-    
-    // MARK: - Table view delegate
     
     /// Setup cells info to display
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -105,6 +106,8 @@ class TransacitonsViewController: UITableViewController {
         }
     }
     
+    
+    // MARK: - Table view delegate
     /// Return the height deppending of the selected user and the delete button
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.row < transactions.count {
@@ -127,7 +130,7 @@ class TransacitonsViewController: UITableViewController {
                                 self.tableView.separatorStyle = .none
                                 self.transactions = []
                                 self.tableView.reloadData()
-                              },
+            },
                               completion: nil
             )
         }
@@ -135,32 +138,40 @@ class TransacitonsViewController: UITableViewController {
     }
     
     /// Make editable only the transaction cells
-     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         if indexPath.row < transactions.count {
             return true
         } else {
             return false
         }
-     }
+    }
     
     /// Delete action for a single transaction
-     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             transactions.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
         }
-     }
+    }
     
     // MARK: - Navigation
     /// Set the user in the destination view controller
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let destinationVC = segue.destination as! TransactionInfoViewController
-        if let indexPath = tableView.indexPathForSelectedRow {
-            let transaction = transactions[indexPath.row]
-            destinationVC.transaction = transaction
-            if let user = users?[transaction.userId] {
-                destinationVC.user = user
+        if segue.identifier == K.toTransactionInfo {
+            let destinationVC = segue.destination as! TransactionInfoViewController
+            if let indexPath = tableView.indexPathForSelectedRow {
+                let transaction = transactions[indexPath.row]
+                destinationVC.transaction = transaction
+                if let user = selectedUser {
+                    destinationVC.user = user
+                }
+                else if let user = users?[transaction.userId] {
+                    destinationVC.user = user
+                }
             }
+        } else if segue.identifier == K.goToSidebar {
+            let destinationVC = segue.destination as! SidebarViewController
+            destinationVC.selectedUser = selectedUser
         }
     }
 }
@@ -180,7 +191,7 @@ extension TransacitonsViewController: DataDelegate {
                               animations: {
                                 self.tableView.separatorStyle = .singleLine
                                 self.tableView.reloadData()
-                              },
+            },
                               completion: nil
             )
         }

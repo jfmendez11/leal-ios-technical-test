@@ -8,7 +8,7 @@
 
 import UIKit
 
-// MARK: -Constants used across the app
+// MARK: - Constants used across the app
 struct K {
     /// Base url for the API requests
     static let baseURL = "https://mobiletest.leal.co/"
@@ -25,17 +25,29 @@ struct K {
     /// Transactions to information segue identifier
     static let toTransactionInfo = "TransactionInfo"
     
+    /// Show sidebar segue identifier
+    static let goToSidebar = "GoToSidebar"
+    
     /// Transaction Cell Reuse Identifier
     static let transactionCell = "TransactionCellId"
     
     /// Transaction Cell Nib Name
     static let cellNibName = "TransactionCell"
     
+    /// Sidebar Item Cell Reuse Identifier
+    static let sidebarItemCell = "SidebarItemCell"
+    
     /// Menu Icon Button
     static let menuIcon = "list.bullet"
     
     /// Trash.fill icon
     static let trashIcon = "trash.fill"
+    
+    /// Change user icon
+    static let logoutIcon = "arrow.uturn.left.square"
+    
+    /// All users selected profile image
+    static let allUsersProfileImage = "person.3.fill"
     
     /// Duration for aninmations
     static let animationDuration = 0.75
@@ -48,6 +60,9 @@ struct K {
     
     /// Height for delete all cell
     static let deleteAllCellHeight: CGFloat = 30.0
+    
+    /// Height for sidebar item cell
+    static let sidebarItemCellHeight: CGFloat = 40.0
     
     /// Color palette for the app
     struct ColorPelette {
@@ -136,5 +151,27 @@ extension UINavigationItem {
         label.textAlignment = .center
         label.text = text
         self.titleView = label
+    }
+}
+
+extension UINavigationBar {
+
+    func setupNavigationMultilineTitle(with text: String) {
+    self.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: K.ColorPelette.brandYellow, NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 20)]
+    for sview in self.subviews {
+        for ssview in sview.subviews {
+            guard let label = ssview as? UILabel else { break }
+            if label.text == text {
+                label.numberOfLines = 2
+                label.lineBreakMode = .byClipping
+                label.adjustsFontSizeToFitWidth = true
+                label.minimumScaleFactor = 0.2
+                //label.sizeToFit()
+                //UIView.animate(withDuration: 0.3, animations: {
+                //    self.frame.size.height = 57 + label.frame.height
+                //})
+            }
+        }
+    }
     }
 }

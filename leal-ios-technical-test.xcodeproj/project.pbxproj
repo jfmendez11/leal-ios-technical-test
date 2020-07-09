@@ -25,6 +25,7 @@
 		5801665B24B632E4001013D3 /* TransactionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5801665924B632E4001013D3 /* TransactionCell.xib */; };
 		5801665D24B65C82001013D3 /* TransactionInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5801665C24B65C82001013D3 /* TransactionInfoViewController.swift */; };
 		5801665F24B6B170001013D3 /* CustomCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5801665E24B6B170001013D3 /* CustomCardView.swift */; };
+		585658E224B789000050E11D /* SidebarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 585658E124B789000050E11D /* SidebarViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -48,6 +49,7 @@
 		5801665924B632E4001013D3 /* TransactionCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TransactionCell.xib; sourceTree = "<group>"; };
 		5801665C24B65C82001013D3 /* TransactionInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionInfoViewController.swift; sourceTree = "<group>"; };
 		5801665E24B6B170001013D3 /* CustomCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCardView.swift; sourceTree = "<group>"; };
+		585658E124B789000050E11D /* SidebarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,6 +102,7 @@
 				5801665624B585C7001013D3 /* TransacitonsViewController.swift */,
 				5801665C24B65C82001013D3 /* TransactionInfoViewController.swift */,
 				5801665E24B6B170001013D3 /* CustomCardView.swift */,
+				585658E124B789000050E11D /* SidebarViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -209,6 +212,7 @@
 				5801665024B556ED001013D3 /* Transaction.swift in Sources */,
 				5801662E24B53BF0001013D3 /* Constants.swift in Sources */,
 				5801661A24B53904001013D3 /* AppDelegate.swift in Sources */,
+				585658E224B789000050E11D /* SidebarViewController.swift in Sources */,
 				5801664924B555CC001013D3 /* User.swift in Sources */,
 				5801665724B585C7001013D3 /* TransacitonsViewController.swift in Sources */,
 				5801664E24B5569B001013D3 /* Commerce.swift in Sources */,
