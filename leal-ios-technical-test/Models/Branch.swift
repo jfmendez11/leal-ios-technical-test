@@ -8,7 +8,7 @@
 
 import Foundation
 
-/// Represents a commerce's brannch
+/// Represents a commerce's branch
 struct Branch: Codable {
     let id: Int
     let name: String

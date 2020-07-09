@@ -13,10 +13,12 @@ class LoginViewController: UIViewController {
     //MARK: Properties
     var userDataManager = DataManager<[User]>()
     var users: [User] = []
+    var selectedUser: User?
     
     //MARK: Outlets
     @IBOutlet weak var iOSTechTestLabel: UILabel!
     @IBOutlet weak var stackView: UIStackView!
+    @IBOutlet weak var selectButton: UIButton!
     @IBOutlet weak var usersPicerView: UIPickerView!
     
     //MARK: - Lifecycle Methods
@@ -28,6 +30,9 @@ class LoginViewController: UIViewController {
         stackView.isHidden = true
         userDataManager.delegate = self
         usersPicerView.delegate = self
+        
+        selectButton.titleLabel?.numberOfLines = 0
+        selectButton.layer.cornerRadius = selectButton.frame.size.height * K.Multipliers.cornerRadiusToCircle
         
         /// Login animation
         iOSTechTestLabel.text = ""
@@ -43,6 +48,24 @@ class LoginViewController: UIViewController {
         // GET: /users
         userDataManager.fetchData(from: "users")
     }
+    
+    //MARK: Actions
+    /// Perform the segue when the user clicks the button
+    @IBAction func selectedUserPressed(_ sender: UIButton) {
+        performSegue(withIdentifier: K.loginToTransactions, sender: self)
+    }
+    
+    
+    //MARK: - Naviagtion
+    /// Set the selected user or a dictionary of users if all the users are selected
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let destinationVC = segue.destination as! TransacitonsViewController
+        if let user = selectedUser {
+            destinationVC.selectedUser = user
+        } else {
+            destinationVC.users = users.toDictionary{ $0.id }
+        }
+    }
 }
 
 //MARK: - DataDelegate Extension
@@ -55,8 +78,9 @@ extension LoginViewController: DataDelegate {
         }
         DispatchQueue.main.async {
             self.usersPicerView.reloadAllComponents()
+            self.selectButton.setTitle("Todos los usuarios", for: .normal)
             UIView.transition(with: self.stackView,
-                              duration: 0.5,
+                              duration: K.animationDuration,
                               options: .showHideTransitionViews,
                               animations: {
                                 self.stackView.isHidden = false
@@ -87,19 +111,20 @@ extension LoginViewController: UIPickerViewDataSource {
 extension LoginViewController: UIPickerViewDelegate {
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         if row == 0 {
-            return ""
+            return "Todos los usuarios"
         } else {
             return users[row-1].name
         }
     }
     
+    /// Change the button's title depending on the picker's selection
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        if row == 0 {
-            return
+        if row > 0 {
+            selectedUser = users[row-1]
+            selectButton.setTitle(selectedUser!.name, for: .normal)
         } else {
-            let selectedUser = users[row-1]
-            UserDefaults.standard.set(selectedUser.id, forKey: K.UserDefaultsKeys.selectedUser)
-            performSegue(withIdentifier: K.loginToTransactions, sender: self)
+            selectButton.setTitle("Todos los usuarios", for: .normal)
+            selectedUser = nil
         }
     }
 }

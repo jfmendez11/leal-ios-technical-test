@@ -11,37 +11,53 @@ import UIKit
 class TransacitonsViewController: UITableViewController {
     
     //MARK: Properties
+    /// Regarding the transactions
     var transactionsDataManager = DataManager<[Transaction]>()
     var transactions: [Transaction] = []
+    
+    /// Regarding the users
+    var users: [Int:User]?
+    var selectedUser: User?
     
     //MARK: LifeCycle Methods
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        //tableView.isHidden = true
+        /// Initial  setup
         tableView.separatorStyle = .none
         
         transactionsDataManager.delegate = self
         
+        /// NavBar setup
         navigationItem.hidesBackButton = true
         let menuImage = UIImage(systemName: K.menuIcon)
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: menuImage, style: .plain, target: self, action: nil)
+        navigationItem.setTitleLabel(with: "Transacciones de \(selectedUser?.name ?? "todos los usuarios")")
         
-        if let userId = UserDefaults.standard.string(forKey: K.UserDefaultsKeys.selectedUser) {
+        /// Fetch the user's transactions if there's a selected user - if not, fetch all the transactions
+        if let userId = selectedUser?.id {
+            // GET: /users/{userId}/transactions
             transactionsDataManager.fetchData(from: "users/\(userId)/transactions")
+        } else {
+            // GET: /transactions
+            transactionsDataManager.fetchData(from: "transactions")
         }
         
+        /// Register custom cells
         tableView.register(UINib(nibName: K.cellNibName, bundle: nil), forCellReuseIdentifier: K.transactionCell)
     }
     
+    /// Reload the table view info when a transaction is read
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tableView.reloadData()
     }
     
     //MARK: Actions
+    /// Fetch the users data again
     @IBAction func reloadPressed(_ sender: UIBarButtonItem) {
+        // FIXME: Cache rollback to network
         if let userId = UserDefaults.standard.string(forKey: K.UserDefaultsKeys.selectedUser) {
+            // GET: /users/{userId}/transactions
             transactionsDataManager.fetchData(from: "users/\(userId)/transactions")
         }
     }
@@ -58,6 +74,8 @@ class TransacitonsViewController: UITableViewController {
     }
     
     // MARK: - Table view delegate
+    
+    /// Setup cells info to display
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.row < transactions.count {
             let transaciton = transactions[indexPath.row]
@@ -67,8 +85,12 @@ class TransacitonsViewController: UITableViewController {
             cell.readImage.tintColor = transaciton.read ? K.ColorPelette.grey : K.ColorPelette.brandYellow
             cell.commerceNameLabel.text = transaciton.commerce.name
             cell.commerceBranchNameLabel.text = transaciton.branch.name
-            cell.createdDateLabel.text = transaciton.createdDate.formatDateFromSelf(to: "MMMM dd, yyyy")
-            cell.userNameLabel.isHidden = true
+            cell.createdDateLabel.text = transaciton.createdDate.formatDateFromSelf(to: K.DateFormats.fullMonthWithRegularDayAndYear)
+            if let unwrappedUsers = users, let user = unwrappedUsers[transaciton.userId] {
+                cell.userNameLabel.text = user.name
+            }
+            cell.userNameLabel.isHidden = selectedUser != nil
+            
             
             return cell
         } else {
@@ -77,27 +99,29 @@ class TransacitonsViewController: UITableViewController {
             cell.textLabel?.text = "Borrar Todas"
             cell.textLabel?.textAlignment = .center
             cell.textLabel?.textColor = .white
-            cell.accessoryView = UIImageView(image: UIImage(systemName: "trash.fill"), highlightedImage: nil)
+            cell.accessoryView = UIImageView(image: UIImage(systemName: K.trashIcon), highlightedImage: nil)
             cell.accessoryView?.tintColor = .white
             return cell
         }
     }
     
+    /// Return the height deppending of the selected user and the delete button
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.row < transactions.count {
-            return K.transactionCellHeightSingleUser
+            return selectedUser != nil ? K.transactionCellHeightSingleUser : K.transactionCellHeightAllUsers
         } else {
-            return 30.0
+            return K.deleteAllCellHeight
         }
     }
     
+    /// Perform segue if a user clicks a transaction or delete everyting if he clicks on delete cell
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.row < transactions.count {
             transactions[indexPath.row].read = true
             performSegue(withIdentifier: K.toTransactionInfo, sender: self)
         } else {
             UIView.transition(with: self.tableView,
-                              duration: 1,
+                              duration: K.animationDuration,
                               options: .transitionCrossDissolve,
                               animations: {
                                 self.tableView.separatorStyle = .none
@@ -110,6 +134,7 @@ class TransacitonsViewController: UITableViewController {
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
+    /// Make editable only the transaction cells
      override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         if indexPath.row < transactions.count {
             return true
@@ -118,6 +143,7 @@ class TransacitonsViewController: UITableViewController {
         }
      }
     
+    /// Delete action for a single transaction
      override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             transactions.remove(at: indexPath.row)
@@ -126,13 +152,17 @@ class TransacitonsViewController: UITableViewController {
      }
     
     // MARK: - Navigation
+    /// Set the user in the destination view controller
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let destinationVC = segue.destination as! TransactionInfoViewController
         if let indexPath = tableView.indexPathForSelectedRow {
-            destinationVC.transaction = transactions[indexPath.row]
+            let transaction = transactions[indexPath.row]
+            destinationVC.transaction = transaction
+            if let user = users?[transaction.userId] {
+                destinationVC.user = user
+            }
         }
     }
-    
 }
 
 //MARK: - DataDelegate Extension
@@ -145,7 +175,7 @@ extension TransacitonsViewController: DataDelegate {
         }
         DispatchQueue.main.async {
             UIView.transition(with: self.tableView,
-                              duration: 0.75,
+                              duration: K.animationDuration,
                               options: .transitionCrossDissolve,
                               animations: {
                                 self.tableView.separatorStyle = .singleLine
