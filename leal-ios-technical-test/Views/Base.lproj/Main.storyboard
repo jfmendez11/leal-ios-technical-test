@@ -224,6 +224,7 @@
                     <connections>
                         <outlet property="profileImage" destination="jFf-D6-QeX" id="swM-Aj-yKk"/>
                         <outlet property="selectedUserNameLabel" destination="yjj-XC-esW" id="qwV-65-URk"/>
+                        <outlet property="stackView" destination="187-Aq-5lf" id="VYU-l7-EaB"/>
                         <outlet property="tableView" destination="uTE-me-TjJ" id="icg-nG-uvJ"/>
                     </connections>
                 </viewController>
@@ -236,7 +237,7 @@
             <objects>
                 <viewController id="Xzx-8E-bkF" customClass="TransactionInfoViewController" customModule="leal_ios_technical_test" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="T6p-fG-Q4l">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="747.5"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="748"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4H1-MS-fTq">

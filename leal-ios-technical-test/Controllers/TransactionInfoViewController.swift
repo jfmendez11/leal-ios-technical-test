@@ -25,6 +25,8 @@ class TransactionInfoViewController: UIViewController {
         }
     }
     
+    let activityIndicator = UIActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
+    
     //MARK: Outlets
     /// Regarding the profile information
     @IBOutlet weak var profileView: CustomCardView!
@@ -45,8 +47,18 @@ class TransactionInfoViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        activityIndicator.style = .large
+        activityIndicator.center = view.center
+        view.addSubview(activityIndicator)
+        activityIndicator.startAnimating()
+        
         /// Initial setup
+        overrideUserInterfaceStyle = .light
+        
         transactionInfoDataManager.delegate = self
+        
+        profileView.isHidden = true
+        transactionInfoView.isHidden = true
         
         /// Relevant fetches to complete the relevant content to display
         if let transactionId = transaction?.id {
@@ -69,6 +81,11 @@ class TransactionInfoViewController: UIViewController {
                     self.userNameLabel.text = self.user!.name
                     self.birthdayLabel.text = self.user!.birthday.formatDateFromSelf(to: K.DateFormats.fullMonthWithRegularDayAndYear)
                     self.joinedLabel.text = self.user!.createdDate.formatDateFromSelf(to: K.DateFormats.fullMonthWithRegularDayAndYear)
+                    
+                    self.profileView.showContentAnimation {
+                        self.profileView.isHidden = false
+                        self.activityIndicator.stopAnimating()
+                    }
                 }
             }
         }
@@ -89,6 +106,9 @@ extension TransactionInfoViewController: DataDelegate {
                 self.createdDateLabel.text = selectedTransaction.createdDate.formatDateFromSelf(to: K.DateFormats.fullMonthWithRegularDayAndYear)
                 self.valueLabel.text = String(transactionInformation.value)
                 self.pointsLabel.text = String(transactionInformation.points)
+                self.transactionInfoView.showContentAnimation {
+                    self.transactionInfoView.isHidden = false
+                }
             }
         }
     }

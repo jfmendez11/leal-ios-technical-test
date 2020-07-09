@@ -10,25 +10,37 @@ import UIKit
 
 class SidebarViewController: UIViewController {
     
+    //MARK: - Properties
     var selectedUser: User?
     var sidebarItems = ["Cambiar de usuario"]
     var sidebarIcons = [K.logoutIcon]
     
+    let activityIndicator = UIActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
+    
+    //MARK: - Outlets
     @IBOutlet weak var profileImage: UIImageView!
     @IBOutlet weak var selectedUserNameLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var stackView: UIStackView!
     
     
-
+    //MARK: - Lifecycle Methods
     override func viewDidLoad() {
         super.viewDidLoad()
+        activityIndicator.style = .large
+        activityIndicator.center = view.center
+        view.addSubview(activityIndicator)
+        activityIndicator.startAnimating()
+        
         
         overrideUserInterfaceStyle = .dark
+        
         tableView.delegate = self
         tableView.dataSource = self
         tableView.separatorStyle = .none
         
         if let user = selectedUser {
+            stackView.isHidden = true
             DispatchQueue.global().async {
                 if let url = URL(string: user.photo) {
                     let urlContets = try? Data(contentsOf: url)
@@ -36,6 +48,8 @@ class SidebarViewController: UIViewController {
                         self.profileImage.generateCirledImage(from: urlContets)
                         self.selectedUserNameLabel.text = user.name
                         self.selectedUserNameLabel.textColor = K.ColorPelette.brandYellow
+                        self.stackView.isHidden = false
+                        self.activityIndicator.stopAnimating()
                     }
                 }
             }
@@ -44,20 +58,9 @@ class SidebarViewController: UIViewController {
             profileImage.tintColor = K.ColorPelette.brandYellow
             selectedUserNameLabel.text = "Todos los usuarios"
             selectedUserNameLabel.textColor = K.ColorPelette.brandYellow
+            activityIndicator.stopAnimating()
         }
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }
 
 //MARK: - TableView Data Source Extenseion
@@ -70,18 +73,15 @@ extension SidebarViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: K.sidebarItemCell, for: indexPath)
         
         let icon = sidebarIcons[indexPath.row], text = sidebarItems[indexPath.row]
-//        cell.imageView?.image = UIImage(systemName: icon)
-//        cell.imageView?.tintColor = .white
-//        cell.textLabel?.text = text
+        
         let imageView = cell.subviews[0].subviews[0].subviews[0] as! UIImageView
         imageView.image = UIImage(systemName: icon)
+        
         let textLabel = cell.subviews[0].subviews[0].subviews[1] as! UILabel
         textLabel.text = text
         
         return cell
     }
-    
-    
 }
 
 //MARK: - TableView Delegate Extenseion

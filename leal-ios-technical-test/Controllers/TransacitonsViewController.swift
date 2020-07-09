@@ -19,19 +19,26 @@ class TransacitonsViewController: UITableViewController {
     var users: [Int:User]?
     var selectedUser: User?
     
+    let activityIndicator = UIActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
+    
     //MARK: LifeCycle Methods
     override func viewDidLoad() {
         super.viewDidLoad()
         /// Initial  setup
+        overrideUserInterfaceStyle = .light
         tableView.separatorStyle = .none
         
         transactionsDataManager.delegate = self
+        
+        activityIndicator.style = .large
+        activityIndicator.center = view.center
+        view.addSubview(activityIndicator)
+        activityIndicator.startAnimating()
         
         /// NavBar setup
         navigationItem.hidesBackButton = true
         let menuImage = UIImage(systemName: K.menuIcon)
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: menuImage, style: .plain, target: self, action: #selector(sideBarMenuPressed))
-        //navigationItem.setTitleLabel(with: "Transacciones de \(selectedUser?.name ?? "todos los usuarios")")
         title = "Transacciones de \(selectedUser?.name ?? "todos los usuarios")"
         navigationController?.navigationBar.setupNavigationMultilineTitle(with: "Transacciones de \(selectedUser?.name ?? "todos los usuarios")")
         
@@ -58,6 +65,7 @@ class TransacitonsViewController: UITableViewController {
     /// Fetch the users data again
     @IBAction func reloadPressed(_ sender: UIBarButtonItem) {
         // FIXME: Cache rollback to network
+        activityIndicator.startAnimating()
         if let userId = selectedUser?.id {
             // GET: /users/{userId}/transactions
             transactionsDataManager.fetchData(from: "users/\(userId)/transactions")
@@ -123,16 +131,11 @@ class TransacitonsViewController: UITableViewController {
             transactions[indexPath.row].read = true
             performSegue(withIdentifier: K.toTransactionInfo, sender: self)
         } else {
-            UIView.transition(with: self.tableView,
-                              duration: K.animationDuration,
-                              options: .transitionCrossDissolve,
-                              animations: {
-                                self.tableView.separatorStyle = .none
-                                self.transactions = []
-                                self.tableView.reloadData()
-            },
-                              completion: nil
-            )
+            tableView.showContentAnimation {
+                self.tableView.separatorStyle = .none
+                self.transactions = []
+                self.tableView.reloadData()
+            }
         }
         tableView.deselectRow(at: indexPath, animated: true)
     }
@@ -176,7 +179,9 @@ class TransacitonsViewController: UITableViewController {
     }
 }
 
-//MARK: - DataDelegate Extension
+//MARK: - Extensions
+
+//MARK: DataDelegate
 extension TransacitonsViewController: DataDelegate {
     
     /// Delegate method to handle data changes from API requests
@@ -185,15 +190,11 @@ extension TransacitonsViewController: DataDelegate {
             transactions = transactionsArray
         }
         DispatchQueue.main.async {
-            UIView.transition(with: self.tableView,
-                              duration: K.animationDuration,
-                              options: .transitionCrossDissolve,
-                              animations: {
-                                self.tableView.separatorStyle = .singleLine
-                                self.tableView.reloadData()
-            },
-                              completion: nil
-            )
+            self.activityIndicator.stopAnimating()
+            self.tableView.showContentAnimation {
+                self.tableView.separatorStyle = .singleLine
+                self.tableView.reloadData()
+            }
         }
     }
     

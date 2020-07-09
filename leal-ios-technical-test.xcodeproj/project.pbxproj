@@ -26,6 +26,7 @@
 		5801665D24B65C82001013D3 /* TransactionInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5801665C24B65C82001013D3 /* TransactionInfoViewController.swift */; };
 		5801665F24B6B170001013D3 /* CustomCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5801665E24B6B170001013D3 /* CustomCardView.swift */; };
 		585658E224B789000050E11D /* SidebarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 585658E124B789000050E11D /* SidebarViewController.swift */; };
+		58B2F04D24B7B82C0087B391 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58B2F04C24B7B82C0087B391 /* Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,6 +51,7 @@
 		5801665C24B65C82001013D3 /* TransactionInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionInfoViewController.swift; sourceTree = "<group>"; };
 		5801665E24B6B170001013D3 /* CustomCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCardView.swift; sourceTree = "<group>"; };
 		585658E124B789000050E11D /* SidebarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarViewController.swift; sourceTree = "<group>"; };
+		58B2F04C24B7B82C0087B391 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,13 +86,12 @@
 			children = (
 				5801661924B53904001013D3 /* AppDelegate.swift */,
 				5801661B24B53904001013D3 /* SceneDelegate.swift */,
-				5801662D24B53BF0001013D3 /* Constants.swift */,
 				5801664A24B555D1001013D3 /* Models */,
 				5801664624B55565001013D3 /* Controllers */,
 				5801664724B5559E001013D3 /* Views */,
-				5801662224B53904001013D3 /* Assets.xcassets */,
+				58B2F05024B7BD5C0087B391 /* Constants and Extensions */,
+				58B2F04F24B7BD160087B391 /* Supporting Files */,
 				5801662724B53904001013D3 /* Info.plist */,
-				5801664424B54768001013D3 /* LaunchScreen.storyboard */,
 			);
 			path = "leal-ios-technical-test";
 			sourceTree = "<group>";
@@ -101,7 +102,6 @@
 				5801661D24B53904001013D3 /* LoginViewController.swift */,
 				5801665624B585C7001013D3 /* TransacitonsViewController.swift */,
 				5801665C24B65C82001013D3 /* TransactionInfoViewController.swift */,
-				5801665E24B6B170001013D3 /* CustomCardView.swift */,
 				585658E124B789000050E11D /* SidebarViewController.swift */,
 			);
 			path = Controllers;
@@ -113,6 +113,7 @@
 				5801661F24B53904001013D3 /* Main.storyboard */,
 				5801665924B632E4001013D3 /* TransactionCell.xib */,
 				5801665824B632E4001013D3 /* TransactionCell.swift */,
+				5801665E24B6B170001013D3 /* CustomCardView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -120,14 +121,40 @@
 		5801664A24B555D1001013D3 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				58B2F04E24B7BCED0087B391 /* Schemas */,
+				5801665424B55A89001013D3 /* DataManager.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		58B2F04E24B7BCED0087B391 /* Schemas */ = {
+			isa = PBXGroup;
+			children = (
 				5801664824B555CC001013D3 /* User.swift */,
 				5801664B24B5565F001013D3 /* Branch.swift */,
 				5801664D24B5569B001013D3 /* Commerce.swift */,
 				5801664F24B556ED001013D3 /* Transaction.swift */,
 				5801665224B5574C001013D3 /* TransactionInfo.swift */,
-				5801665424B55A89001013D3 /* DataManager.swift */,
 			);
-			path = Models;
+			path = Schemas;
+			sourceTree = "<group>";
+		};
+		58B2F04F24B7BD160087B391 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				5801662224B53904001013D3 /* Assets.xcassets */,
+				5801664424B54768001013D3 /* LaunchScreen.storyboard */,
+			);
+			path = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		58B2F05024B7BD5C0087B391 /* Constants and Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				5801662D24B53BF0001013D3 /* Constants.swift */,
+				58B2F04C24B7B82C0087B391 /* Extensions.swift */,
+			);
+			path = "Constants and Extensions";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -215,6 +242,7 @@
 				585658E224B789000050E11D /* SidebarViewController.swift in Sources */,
 				5801664924B555CC001013D3 /* User.swift in Sources */,
 				5801665724B585C7001013D3 /* TransacitonsViewController.swift in Sources */,
+				58B2F04D24B7B82C0087B391 /* Extensions.swift in Sources */,
 				5801664E24B5569B001013D3 /* Commerce.swift in Sources */,
 				5801661C24B53904001013D3 /* SceneDelegate.swift in Sources */,
 			);

@@ -79,14 +79,9 @@ extension LoginViewController: DataDelegate {
         DispatchQueue.main.async {
             self.usersPicerView.reloadAllComponents()
             self.selectButton.setTitle("Todos los usuarios", for: .normal)
-            UIView.transition(with: self.stackView,
-                              duration: K.animationDuration,
-                              options: .showHideTransitionViews,
-                              animations: {
-                                self.stackView.isHidden = false
-                              },
-                              completion: nil
-            )
+            self.stackView.showContentAnimation {
+                self.stackView.isHidden = false
+            }
         }
     }
     
