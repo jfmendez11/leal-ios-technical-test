@@ -13,7 +13,7 @@
         - Go to the repo's root directory ```leal-ios-technical-test``` and run ```carthage update``` in the terminal.
 3. Open ```leal-ios-technical-test.xcodeproj``` and execute the app on a simulator or physical device.
 
-**Note:** If running on a physical device, make sure iOS version is above 13.5
+**Note:** If running on a physical device, make sure iOS version is above 13.5 and modify the Signing & Capabilities to your profile.
 
 
 ## App Workflow
