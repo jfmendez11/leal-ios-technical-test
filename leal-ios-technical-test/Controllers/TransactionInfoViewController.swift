@@ -78,9 +78,21 @@ class TransactionInfoViewController: UIViewController {
                 let urlContets = try? Data(contentsOf: url)
                 DispatchQueue.main.async {
                     self.profileImage.generateCirledImage(from: urlContets)
-                    self.userNameLabel.text = self.user!.name
-                    self.birthdayLabel.text = self.user!.birthday.formatDateFromSelf(to: K.DateFormats.fullMonthWithRegularDayAndYear)
-                    self.joinedLabel.text = self.user!.createdDate.formatDateFromSelf(to: K.DateFormats.fullMonthWithRegularDayAndYear)
+                    
+                    self.userNameLabel.attributedText =
+                        NSMutableAttributedString()
+                            .bold("Nombre: ")
+                            .normal(self.user!.name)
+                    
+                    self.birthdayLabel.attributedText =
+                        NSMutableAttributedString()
+                            .bold("Nacimiento: ")
+                            .normal(self.user!.birthday.formatDateFromSelf(to: K.DateFormats.fullMonthWithRegularDayAndYear)!)
+                    
+                    self.joinedLabel.attributedText =
+                        NSMutableAttributedString()
+                        .bold("Leal desde: ")
+                        .normal(self.user!.createdDate.formatDateFromSelf(to: K.DateFormats.fullMonthWithRegularDayAndYear)!)
                     
                     self.profileView.showContentAnimation {
                         self.profileView.isHidden = false
@@ -101,11 +113,31 @@ extension TransactionInfoViewController: DataDelegate {
         if let transactionInformation = model as? TransactionInfo, let selectedTransaction = transaction {
             transactionInfo = transactionInformation
             DispatchQueue.main.async {
-                self.commerceNameLabel.text = selectedTransaction.commerce.name
-                self.branchNameLabel.text = selectedTransaction.branch.name
-                self.createdDateLabel.text = selectedTransaction.createdDate.formatDateFromSelf(to: K.DateFormats.fullMonthWithRegularDayAndYear)
-                self.valueLabel.text = String(transactionInformation.value)
-                self.pointsLabel.text = String(transactionInformation.points)
+                self.commerceNameLabel.attributedText =
+                    NSMutableAttributedString()
+                        .bold("Comercio: ")
+                        .normal(selectedTransaction.commerce.name)
+                
+                self.branchNameLabel.attributedText =
+                    NSMutableAttributedString()
+                        .bold("Local: ")
+                        .normal(selectedTransaction.branch.name)
+                
+                self.createdDateLabel.attributedText =
+                    NSMutableAttributedString()
+                        .bold("Fecha: ")
+                        .normal(selectedTransaction.createdDate.formatDateFromSelf(to: K.DateFormats.fullMonthWithRegularDayAndYear)!)
+                
+                self.valueLabel.attributedText =
+                    NSMutableAttributedString()
+                        .bold("Valor: ")
+                        .normal(String(transactionInformation.value))
+                
+                self.pointsLabel.attributedText =
+                    NSMutableAttributedString()
+                        .bold("Puntos: ")
+                        .normal(String(transactionInformation.points))
+                
                 self.transactionInfoView.showContentAnimation {
                     self.transactionInfoView.isHidden = false
                 }
@@ -114,8 +146,11 @@ extension TransactionInfoViewController: DataDelegate {
     }
     
     /// Delegate method to handle API fetching errors
-    // TODO: Handle fetching errors
     func didFailWithError(_ error: Error) {
-        print(error)
+        DispatchQueue.main.async() {
+            let alert = UIAlertController(title: "Ups", message: "Ocurrió un error al cargar los datos", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            self.present(alert, animated: true)
+        }
     }
 }

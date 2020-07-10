@@ -25,6 +25,7 @@
 		5801665B24B632E4001013D3 /* TransactionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5801665924B632E4001013D3 /* TransactionCell.xib */; };
 		5801665D24B65C82001013D3 /* TransactionInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5801665C24B65C82001013D3 /* TransactionInfoViewController.swift */; };
 		5801665F24B6B170001013D3 /* CustomCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5801665E24B6B170001013D3 /* CustomCardView.swift */; };
+		583CE25824B8D19D005FB57F /* DataManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 583CE25724B8D19D005FB57F /* DataManagerTests.swift */; };
 		585658E224B789000050E11D /* SidebarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 585658E124B789000050E11D /* SidebarViewController.swift */; };
 		58B2F04D24B7B82C0087B391 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58B2F04C24B7B82C0087B391 /* Extensions.swift */; };
 		58DECD7024B80C5D00B66F4F /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58DECD6E24B80C5D00B66F4F /* Realm.framework */; };
@@ -32,7 +33,18 @@
 		58DECD7224B80C5D00B66F4F /* RealmSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58DECD6F24B80C5D00B66F4F /* RealmSwift.framework */; };
 		58DECD7324B80C5D00B66F4F /* RealmSwift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 58DECD6F24B80C5D00B66F4F /* RealmSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		58DECD7724B8134A00B66F4F /* RealmTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58DECD7624B8134A00B66F4F /* RealmTransaction.swift */; };
+		58DECDA924B8CF2D00B66F4F /* leal_ios_UnitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58DECDA824B8CF2D00B66F4F /* leal_ios_UnitTests.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		58DECDAB24B8CF2D00B66F4F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5801660E24B53904001013D3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 5801661524B53904001013D3;
+			remoteInfo = "leal-ios-technical-test";
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		58DECD7424B80C5D00B66F4F /* Embed Frameworks */ = {
@@ -70,11 +82,15 @@
 		5801665924B632E4001013D3 /* TransactionCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TransactionCell.xib; sourceTree = "<group>"; };
 		5801665C24B65C82001013D3 /* TransactionInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionInfoViewController.swift; sourceTree = "<group>"; };
 		5801665E24B6B170001013D3 /* CustomCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCardView.swift; sourceTree = "<group>"; };
+		583CE25724B8D19D005FB57F /* DataManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManagerTests.swift; sourceTree = "<group>"; };
 		585658E124B789000050E11D /* SidebarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarViewController.swift; sourceTree = "<group>"; };
 		58B2F04C24B7B82C0087B391 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		58DECD6E24B80C5D00B66F4F /* Realm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Realm.framework; path = Carthage/Build/iOS/Realm.framework; sourceTree = "<group>"; };
 		58DECD6F24B80C5D00B66F4F /* RealmSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RealmSwift.framework; path = Carthage/Build/iOS/RealmSwift.framework; sourceTree = "<group>"; };
 		58DECD7624B8134A00B66F4F /* RealmTransaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmTransaction.swift; sourceTree = "<group>"; };
+		58DECDA624B8CF2D00B66F4F /* leal-ios-UnitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "leal-ios-UnitTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		58DECDA824B8CF2D00B66F4F /* leal_ios_UnitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = leal_ios_UnitTests.swift; sourceTree = "<group>"; };
+		58DECDAA24B8CF2D00B66F4F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,6 +103,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		58DECDA324B8CF2D00B66F4F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -94,6 +117,7 @@
 			isa = PBXGroup;
 			children = (
 				5801661824B53904001013D3 /* leal-ios-technical-test */,
+				58DECDA724B8CF2D00B66F4F /* leal-ios-UnitTests */,
 				5801661724B53904001013D3 /* Products */,
 				58DECD6D24B80C5D00B66F4F /* Frameworks */,
 			);
@@ -103,6 +127,7 @@
 			isa = PBXGroup;
 			children = (
 				5801661624B53904001013D3 /* leal-ios-technical-test.app */,
+				58DECDA624B8CF2D00B66F4F /* leal-ios-UnitTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -201,6 +226,16 @@
 			path = "Realm Models";
 			sourceTree = "<group>";
 		};
+		58DECDA724B8CF2D00B66F4F /* leal-ios-UnitTests */ = {
+			isa = PBXGroup;
+			children = (
+				58DECDA824B8CF2D00B66F4F /* leal_ios_UnitTests.swift */,
+				583CE25724B8D19D005FB57F /* DataManagerTests.swift */,
+				58DECDAA24B8CF2D00B66F4F /* Info.plist */,
+			);
+			path = "leal-ios-UnitTests";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -222,6 +257,24 @@
 			productReference = 5801661624B53904001013D3 /* leal-ios-technical-test.app */;
 			productType = "com.apple.product-type.application";
 		};
+		58DECDA524B8CF2D00B66F4F /* leal-ios-UnitTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 58DECDAD24B8CF2D00B66F4F /* Build configuration list for PBXNativeTarget "leal-ios-UnitTests" */;
+			buildPhases = (
+				58DECDA224B8CF2D00B66F4F /* Sources */,
+				58DECDA324B8CF2D00B66F4F /* Frameworks */,
+				58DECDA424B8CF2D00B66F4F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				58DECDAC24B8CF2D00B66F4F /* PBXTargetDependency */,
+			);
+			name = "leal-ios-UnitTests";
+			productName = "leal-ios-UnitTests";
+			productReference = 58DECDA624B8CF2D00B66F4F /* leal-ios-UnitTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -234,6 +287,10 @@
 				TargetAttributes = {
 					5801661524B53904001013D3 = {
 						CreatedOnToolsVersion = 11.5;
+					};
+					58DECDA524B8CF2D00B66F4F = {
+						CreatedOnToolsVersion = 11.5;
+						TestTargetID = 5801661524B53904001013D3;
 					};
 				};
 			};
@@ -251,6 +308,7 @@
 			projectRoot = "";
 			targets = (
 				5801661524B53904001013D3 /* leal-ios-technical-test */,
+				58DECDA524B8CF2D00B66F4F /* leal-ios-UnitTests */,
 			);
 		};
 /* End PBXProject section */
@@ -264,6 +322,13 @@
 				5801662324B53904001013D3 /* Assets.xcassets in Resources */,
 				5801665B24B632E4001013D3 /* TransactionCell.xib in Resources */,
 				5801662124B53904001013D3 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		58DECDA424B8CF2D00B66F4F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -294,7 +359,24 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		58DECDA224B8CF2D00B66F4F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				58DECDA924B8CF2D00B66F4F /* leal_ios_UnitTests.swift in Sources */,
+				583CE25824B8D19D005FB57F /* DataManagerTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		58DECDAC24B8CF2D00B66F4F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 5801661524B53904001013D3 /* leal-ios-technical-test */;
+			targetProxy = 58DECDAB24B8CF2D00B66F4F /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		5801661F24B53904001013D3 /* Main.storyboard */ = {
@@ -466,6 +548,46 @@
 			};
 			name = Release;
 		};
+		58DECDAE24B8CF2D00B66F4F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = V6P8CRBUFK;
+				INFOPLIST_FILE = "leal-ios-UnitTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.jfmp.leal-ios-UnitTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/leal-ios-technical-test.app/leal-ios-technical-test";
+			};
+			name = Debug;
+		};
+		58DECDAF24B8CF2D00B66F4F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = V6P8CRBUFK;
+				INFOPLIST_FILE = "leal-ios-UnitTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.jfmp.leal-ios-UnitTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/leal-ios-technical-test.app/leal-ios-technical-test";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -483,6 +605,15 @@
 			buildConfigurations = (
 				5801662B24B53904001013D3 /* Debug */,
 				5801662C24B53904001013D3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		58DECDAD24B8CF2D00B66F4F /* Build configuration list for PBXNativeTarget "leal-ios-UnitTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				58DECDAE24B8CF2D00B66F4F /* Debug */,
+				58DECDAF24B8CF2D00B66F4F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

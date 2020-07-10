@@ -73,7 +73,7 @@ extension UINavigationItem {
 extension UINavigationBar {
     /// Make the large title fit in the NavigationController
     func setupNavigationMultilineTitle(with text: String) {
-        self.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: K.ColorPelette.brandYellow, NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 20)]
+        self.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: K.ColorPelette.brandYellow, NSAttributedString.Key.font: UIFont(name: "AvenirNext-Bold", size: K.largeTitleFontSize) ?? UIFont.boldSystemFont(ofSize: K.largeTitleFontSize)]
         for sview in self.subviews {
             for ssview in sview.subviews {
                 guard let label = ssview as? UILabel else { break }
@@ -97,5 +97,31 @@ extension UIView {
                           animations: animations,
                           completion: nil
         )
+    }
+}
+
+extension NSMutableAttributedString {
+    var fontSize:CGFloat { return K.cardLabelFontSize }
+    var boldFont:UIFont { return UIFont(name: "AvenirNext-Bold", size: fontSize) ?? UIFont.boldSystemFont(ofSize: fontSize) }
+    var normalFont:UIFont { return UIFont(name: "AvenirNext-Regular", size: fontSize) ?? UIFont.systemFont(ofSize: fontSize)}
+
+    func bold(_ value:String) -> NSMutableAttributedString {
+
+        let attributes:[NSAttributedString.Key : Any] = [
+            .font : boldFont
+        ]
+
+        self.append(NSAttributedString(string: value, attributes:attributes))
+        return self
+    }
+
+    func normal(_ value:String) -> NSMutableAttributedString {
+
+        let attributes:[NSAttributedString.Key : Any] = [
+            .font : normalFont,
+        ]
+
+        self.append(NSAttributedString(string: value, attributes:attributes))
+        return self
     }
 }

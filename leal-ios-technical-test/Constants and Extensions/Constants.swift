@@ -70,6 +70,12 @@ struct K {
     /// Height for sidebar item cell
     static let sidebarItemCellHeight: CGFloat = 40.0
     
+    /// Font size for card label
+    static let cardLabelFontSize: CGFloat = 20.0
+    
+    /// Font size for large title
+    static let largeTitleFontSize: CGFloat = 20.0
+    
     /// Color palette for the app
     struct ColorPelette {
         static let brandYellow = #colorLiteral(red: 0.8257568479, green: 0.6739847064, blue: 0, alpha: 1)

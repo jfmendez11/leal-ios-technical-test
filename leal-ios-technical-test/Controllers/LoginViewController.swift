@@ -87,7 +87,11 @@ extension LoginViewController: DataDelegate {
     
     /// Delegate method to handle API fetching errors
     func didFailWithError(_ error: Error) {
-        print(error)
+        DispatchQueue.main.async() {
+            let alert = UIAlertController(title: "Ups", message: "Ocurrió un error al cargar los datos", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            self.present(alert, animated: true)
+        }
     }
 }
 

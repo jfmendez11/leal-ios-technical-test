@@ -32,7 +32,6 @@ class SidebarViewController: UIViewController {
         view.addSubview(activityIndicator)
         activityIndicator.startAnimating()
         
-        
         overrideUserInterfaceStyle = .dark
         
         tableView.delegate = self

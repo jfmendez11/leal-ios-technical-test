@@ -14,7 +14,6 @@ class TransacitonsViewController: UITableViewController {
     //MARK: Properties
     /// Regarding the transactions
     var transactionsDataManager = DataManager<[Transaction]>()
-    //var transactions: [Transaction] = []
     
     // Realm
     var localTransactions: Results<RealmTransaction>?
@@ -48,23 +47,16 @@ class TransacitonsViewController: UITableViewController {
         title = "Transacciones de \(selectedUser?.name ?? "todos los usuarios")"
         navigationController?.navigationBar.setupNavigationMultilineTitle(with: "Transacciones de \(selectedUser?.name ?? "todos los usuarios")")
         
+        /// Load the transactions
         loadTransactions()
-
+        
+        /// If there aren't any stored locally fetch from server and store locally
         if localTransactions?.count == 0 {
             transactionsDataManager.fetchData(from: "transactions")
         } else {
             tableView.reloadData()
             activityIndicator.stopAnimating()
         }
-        
-        /// Fetch the user's transactions if there's a selected user - if not, fetch all the transactions
-        //        if let userId = selectedUser?.id {
-        //            // GET: /users/{userId}/transactions
-        //            transactionsDataManager.fetchData(from: "users/\(userId)/transactions")
-        //        } else {
-        //            // GET: /transactions
-        //            transactionsDataManager.fetchData(from: "transactions")
-        //        }
         
         /// Register custom cells
         tableView.register(UINib(nibName: K.cellNibName, bundle: nil), forCellReuseIdentifier: K.transactionCell)
@@ -79,31 +71,25 @@ class TransacitonsViewController: UITableViewController {
     //MARK: Actions
     /// Fetch the users data again
     @IBAction func reloadPressed(_ sender: UIBarButtonItem) {
-        // FIXME: Cache rollback to network
+        
         activityIndicator.startAnimating()
         navigationItem.rightBarButtonItem?.isEnabled = false
         let transactions = realm.objects(RealmTransaction.self)
-            transactions.forEach { transaction in
-                do {
-                    try realm.write {
-                        transaction.deleted = false
-                        transaction.read = false
-                    }
-                } catch {
-                    print("error reloading \(error)")
+        transactions.forEach { transaction in
+            do {
+                try realm.write {
+                    transaction.deleted = false
+                    transaction.read = false
                 }
+            } catch {
+                print("error reloading \(error)")
             }
-            activityIndicator.stopAnimating()
-            tableView.showContentAnimation {
-                self.tableView.separatorStyle = .singleLine
-                self.tableView.reloadData()
-            }
-//        if let userId = selectedUser?.id {
-//            // GET: /users/{userId}/transactions
-//            transactionsDataManager.fetchData(from: "users/\(userId)/transactions")
-//        } else {
-//            transactionsDataManager.fetchData(from: "transactions")
-//        }
+        }
+        activityIndicator.stopAnimating()
+        tableView.showContentAnimation {
+            self.tableView.separatorStyle = .singleLine
+            self.tableView.reloadData()
+        }
     }
     
     @objc private func sideBarMenuPressed() {
@@ -132,33 +118,35 @@ class TransacitonsViewController: UITableViewController {
     /// Setup cells info to display
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if let transactions = localTransactions {
-        if indexPath.row < transactions.count {
-            let transaction = transactions[indexPath.row]
-            
-            let cell = tableView.dequeueReusableCell(withIdentifier: K.transactionCell, for: indexPath) as! TransactionCell
-            
-            cell.isHidden = transaction.deleted
-            
-            cell.readImage.tintColor = transaction.read ? K.ColorPelette.grey : K.ColorPelette.brandYellow
-            cell.commerceNameLabel.text = transaction.commerce.name
-            cell.commerceBranchNameLabel.text = transaction.branch.name
-            cell.createdDateLabel.text = transaction.createdDate.formatDateFromSelf(to: K.DateFormats.fullMonthWithRegularDayAndYear)
-            if let unwrappedUsers = users, let user = unwrappedUsers[transaction.userId] {
-                cell.userNameLabel.text = user.name
+            /// Data cell
+            if indexPath.row < transactions.count {
+                let transaction = transactions[indexPath.row]
+                
+                let cell = tableView.dequeueReusableCell(withIdentifier: K.transactionCell, for: indexPath) as! TransactionCell
+                
+                cell.isHidden = transaction.deleted
+                
+                cell.readImage.tintColor = transaction.read ? K.ColorPelette.grey : K.ColorPelette.brandYellow
+                cell.commerceNameLabel.text = transaction.commerce.name
+                cell.commerceBranchNameLabel.text = transaction.branch.name
+                cell.createdDateLabel.text = transaction.createdDate.formatDateFromSelf(to: K.DateFormats.fullMonthWithRegularDayAndYear)
+                if let unwrappedUsers = users, let user = unwrappedUsers[transaction.userId] {
+                    cell.userNameLabel.text = user.name
+                }
+                cell.userNameLabel.isHidden = selectedUser != nil
+                
+                return cell
+            } else {
+                /// Delete all cell
+                let cell = UITableViewCell()
+                cell.backgroundColor = .red
+                cell.textLabel?.text = "Borrar Todas"
+                cell.textLabel?.textAlignment = .center
+                cell.textLabel?.textColor = .white
+                cell.accessoryView = UIImageView(image: UIImage(systemName: K.trashIcon), highlightedImage: nil)
+                cell.accessoryView?.tintColor = .white
+                return cell
             }
-            cell.userNameLabel.isHidden = selectedUser != nil
-            
-            return cell
-        } else {
-            let cell = UITableViewCell()
-            cell.backgroundColor = .red
-            cell.textLabel?.text = "Borrar Todas"
-            cell.textLabel?.textAlignment = .center
-            cell.textLabel?.textColor = .white
-            cell.accessoryView = UIImageView(image: UIImage(systemName: K.trashIcon), highlightedImage: nil)
-            cell.accessoryView?.tintColor = .white
-            return cell
-        }
         }
         return UITableViewCell()
     }
@@ -179,37 +167,36 @@ class TransacitonsViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let transactions = localTransactions {
             let count = transactions.count
-        if indexPath.row < count {
-            
-            navigationItem.rightBarButtonItem?.isEnabled = true
-            do {
-                try realm.write {
-                    transactions[indexPath.row].read = true
-                }
-            } catch {
-                print("Error saving read status, \(error)")
-            }
-            
-            performSegue(withIdentifier: K.toTransactionInfo, sender: self)
-            
-        } else {
-//            transactions = []
-            navigationItem.rightBarButtonItem?.isEnabled = true
-            transactions.forEach { transaction in
+            if indexPath.row < count {
+                
+                navigationItem.rightBarButtonItem?.isEnabled = true
                 do {
                     try realm.write {
-                        transaction.deleted = true
+                        transactions[indexPath.row].read = true
                     }
                 } catch {
                     print("Error saving read status, \(error)")
                 }
+                
+                performSegue(withIdentifier: K.toTransactionInfo, sender: self)
+                
+            } else {
+                navigationItem.rightBarButtonItem?.isEnabled = true
+                transactions.forEach { transaction in
+                    do {
+                        try realm.write {
+                            transaction.deleted = true
+                        }
+                    } catch {
+                        print("Error saving read status, \(error)")
+                    }
+                }
+                
+                tableView.showContentAnimation {
+                    self.tableView.separatorStyle = .none
+                    self.tableView.reloadData()
+                }
             }
-            
-            tableView.showContentAnimation {
-                self.tableView.separatorStyle = .none
-                self.tableView.reloadData()
-            }
-        }
         }
         tableView.deselectRow(at: indexPath, animated: true)
     }
@@ -249,14 +236,14 @@ class TransacitonsViewController: UITableViewController {
             let destinationVC = segue.destination as! TransactionInfoViewController
             if let indexPath = tableView.indexPathForSelectedRow {
                 if let transaction = localTransactions?[indexPath.row] {
-                destinationVC.transaction = transaction
-                
-                if let user = selectedUser {
-                    destinationVC.user = user
-                }
-                else if let user = users?[transaction.userId] {
-                    destinationVC.user = user
-                }
+                    destinationVC.transaction = transaction
+                    
+                    if let user = selectedUser {
+                        destinationVC.user = user
+                    }
+                    else if let user = users?[transaction.userId] {
+                        destinationVC.user = user
+                    }
                 }
             }
         } else if segue.identifier == K.goToSidebar {
@@ -273,10 +260,9 @@ extension TransacitonsViewController: DataDelegate {
     
     /// Delegate method to handle data changes from API requests
     func didUpdateData(model: Codable) {
-        
+        /// Store locally if the transactions aren't stored
         DispatchQueue.main.async {
             if let transactionsArray = model as? [Transaction] {
-                //            transactions = transactionsArray
                 transactionsArray.forEach {
                     
                     let newTransaction = RealmTransaction()
@@ -287,9 +273,9 @@ extension TransacitonsViewController: DataDelegate {
                     if let commerce = self.realm.objects(RealmCommerce.self).filter("id = \($0.commerce.id)").first {
                         newTransaction.commerce = commerce
                     } else {
-                    let newCommerce = RealmCommerce()
-                    newCommerce.id = $0.commerce.id
-                    newCommerce.name = $0.commerce.name
+                        let newCommerce = RealmCommerce()
+                        newCommerce.id = $0.commerce.id
+                        newCommerce.name = $0.commerce.name
                         newTransaction.commerce = newCommerce
                     }
                     
@@ -297,10 +283,10 @@ extension TransacitonsViewController: DataDelegate {
                         newTransaction.branch = branch
                     } else {
                         let newBranch = RealmBranch()
-                    newBranch.id = $0.branch.id
-                    newBranch.name = $0.branch.name
-                    
-                    newTransaction.branch = newBranch
+                        newBranch.id = $0.branch.id
+                        newBranch.name = $0.branch.name
+                        
+                        newTransaction.branch = newBranch
                     }
                     
                     do {
@@ -322,34 +308,10 @@ extension TransacitonsViewController: DataDelegate {
     
     /// Delegate method to handle API fetching errors
     func didFailWithError(_ error: Error) {
-        print(error)
-    }
-}
-
-//MARK: - Extension to handle locla storage
-extension DataManager {
-    //MARK: - Local Storage
-    /// Saving to the sandbox
-    func save(transactions: [Transaction], to filepath: URL) {
-        let encoder = JSONEncoder()
-        do {
-            let data = try encoder.encode(transactions)
-            try data.write(to: filepath)
-        } catch {
-            delegate?.didFailWithError(error)
+        DispatchQueue.main.async() {
+            let alert = UIAlertController(title: "Ups", message: "Ocurrió un error al cargar los datos", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            self.present(alert, animated: true)
         }
-    }
-    
-    /// Loading from the sandbox
-    func load(from filepath: URL) -> [Transaction]? {
-        if let data = try? Data(contentsOf: filepath) {
-            let decoder = JSONDecoder()
-            do {
-                return try decoder.decode([Transaction].self, from: data)
-            } catch {
-                delegate?.didFailWithError(error)
-            }
-        }
-        return nil
     }
 }
