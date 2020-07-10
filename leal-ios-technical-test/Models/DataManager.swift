@@ -19,7 +19,7 @@ struct DataManager <Model: Codable> {
     //MARK: Properties
     var delegate: DataDelegate?
     
-    //MARK: Functions
+    //MARK: - Networking
     /// Fetches data with the specified endpoint
     func fetchData(from endpoint: String) {
         let urlString = K.baseURL + endpoint

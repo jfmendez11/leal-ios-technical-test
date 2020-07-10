@@ -66,6 +66,7 @@ class TransacitonsViewController: UITableViewController {
     @IBAction func reloadPressed(_ sender: UIBarButtonItem) {
         // FIXME: Cache rollback to network
         activityIndicator.startAnimating()
+        navigationItem.rightBarButtonItem?.isEnabled = false
         if let userId = selectedUser?.id {
             // GET: /users/{userId}/transactions
             transactionsDataManager.fetchData(from: "users/\(userId)/transactions")
@@ -100,7 +101,6 @@ class TransacitonsViewController: UITableViewController {
             }
             cell.userNameLabel.isHidden = selectedUser != nil
             
-            
             return cell
         } else {
             let cell = UITableViewCell()
@@ -128,12 +128,16 @@ class TransacitonsViewController: UITableViewController {
     /// Perform segue if a user clicks a transaction or delete everyting if he clicks on delete cell
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.row < transactions.count {
+            navigationItem.rightBarButtonItem?.isEnabled = true
+            
             transactions[indexPath.row].read = true
+            
             performSegue(withIdentifier: K.toTransactionInfo, sender: self)
         } else {
+            transactions = []
+            
             tableView.showContentAnimation {
                 self.tableView.separatorStyle = .none
-                self.transactions = []
                 self.tableView.reloadData()
             }
         }
@@ -152,7 +156,10 @@ class TransacitonsViewController: UITableViewController {
     /// Delete action for a single transaction
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
+            navigationItem.rightBarButtonItem?.isEnabled = true
+            
             transactions.remove(at: indexPath.row)
+            
             tableView.deleteRows(at: [indexPath], with: .fade)
         }
     }
@@ -201,5 +208,33 @@ extension TransacitonsViewController: DataDelegate {
     /// Delegate method to handle API fetching errors
     func didFailWithError(_ error: Error) {
         print(error)
+    }
+}
+
+//MARK: - Extension to handle locla storage
+extension DataManager {
+    //MARK: - Local Storage
+    /// Saving to the sandbox
+    func save(transactions: [Transaction], to filepath: URL) {
+        let encoder = JSONEncoder()
+        do {
+            let data = try encoder.encode(transactions)
+            try data.write(to: filepath)
+        } catch {
+            delegate?.didFailWithError(error)
+        }
+    }
+    
+    /// Loading from the sandbox
+    func load(from filepath: URL) -> [Transaction]? {
+        if let data = try? Data(contentsOf: filepath) {
+            let decoder = JSONDecoder()
+            do {
+                return try decoder.decode([Transaction].self, from: data)
+            } catch {
+                delegate?.didFailWithError(error)
+            }
+        }
+        return nil
     }
 }

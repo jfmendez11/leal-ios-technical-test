@@ -13,6 +13,12 @@ struct K {
     /// Base url for the API requests
     static let baseURL = "https://mobiletest.leal.co/"
     
+    /// Transactions data file path to access the sandbox
+    static let transactionsFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Transactions.json")
+    
+    /// Deleted Transactions data file path to access the sandbox
+    static let deleteTransactionsFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("DeletedTransactions.json")
+    
     /// Label text in login for animation
     static let loginLabelText = "iOS Technical Test"
     

@@ -120,7 +120,7 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Transacciones" id="Tuh-ud-Vv5">
-                        <barButtonItem key="rightBarButtonItem" systemItem="refresh" id="rGs-5c-W2a">
+                        <barButtonItem key="rightBarButtonItem" enabled="NO" systemItem="refresh" id="rGs-5c-W2a">
                             <connections>
                                 <action selector="reloadPressed:" destination="RHO-HH-xjJ" id="eTi-k8-QVR"/>
                             </connections>
@@ -237,7 +237,7 @@
             <objects>
                 <viewController id="Xzx-8E-bkF" customClass="TransactionInfoViewController" customModule="leal_ios_technical_test" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="T6p-fG-Q4l">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="748"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="747.5"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4H1-MS-fTq">
