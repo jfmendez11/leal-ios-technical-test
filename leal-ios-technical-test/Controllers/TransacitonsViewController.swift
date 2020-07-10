@@ -13,17 +13,17 @@ class TransacitonsViewController: UITableViewController {
     
     //MARK: Properties
     /// Regarding the transactions
-    var transactionsDataManager = DataManager<[Transaction]>()
+    private var transactionsDataManager = DataManager<[Transaction]>()
     
     // Realm
-    var localTransactions: Results<RealmTransaction>?
-    let realm = try! Realm()
+    private var localTransactions: Results<RealmTransaction>?
+    private let realm = try! Realm()
     
     /// Regarding the users
     var users: [Int:User]?
     var selectedUser: User?
     
-    let activityIndicator = UIActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
+    private let activityIndicator = UIActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
     
     //MARK: LifeCycle Methods
     override func viewDidLoad() {
@@ -74,6 +74,7 @@ class TransacitonsViewController: UITableViewController {
         
         activityIndicator.startAnimating()
         navigationItem.rightBarButtonItem?.isEnabled = false
+        
         let transactions = realm.objects(RealmTransaction.self)
         transactions.forEach { transaction in
             do {
@@ -85,6 +86,7 @@ class TransacitonsViewController: UITableViewController {
                 print("error reloading \(error)")
             }
         }
+        
         activityIndicator.stopAnimating()
         tableView.showContentAnimation {
             self.tableView.separatorStyle = .singleLine
@@ -96,18 +98,6 @@ class TransacitonsViewController: UITableViewController {
         performSegue(withIdentifier: K.goToSidebar, sender: self)
     }
     
-    //MARK: - Realm methods
-    func loadTransactions() {
-        tableView.separatorStyle = .singleLine
-        var predicate = "deleted == false"
-        if realm.objects(RealmTransaction.self).filter("deleted == true OR read == true").first != nil {
-            navigationItem.rightBarButtonItem?.isEnabled = true
-        }
-        if let userId = selectedUser?.id {
-            predicate += " && userId == \(userId)"
-        }
-        localTransactions = realm.objects(RealmTransaction.self).filter(predicate)
-    }
     
     // MARK: - Table view data source
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -170,9 +160,11 @@ class TransacitonsViewController: UITableViewController {
             if indexPath.row < count {
                 
                 navigationItem.rightBarButtonItem?.isEnabled = true
+                
+                let transaction = transactions[indexPath.row]
                 do {
                     try realm.write {
-                        transactions[indexPath.row].read = true
+                        transaction.read = true
                     }
                 } catch {
                     print("Error saving read status, \(error)")
@@ -313,5 +305,20 @@ extension TransacitonsViewController: DataDelegate {
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
             self.present(alert, animated: true)
         }
+    }
+}
+
+//MARK: - Realm Methods
+extension TransacitonsViewController {
+    private func loadTransactions() {
+        tableView.separatorStyle = .singleLine
+        var predicate = "deleted == false"
+        if realm.objects(RealmTransaction.self).filter("deleted == true OR read == true").first != nil {
+            navigationItem.rightBarButtonItem?.isEnabled = true
+        }
+        if let userId = selectedUser?.id {
+            predicate += " && userId == \(userId)"
+        }
+        localTransactions = realm.objects(RealmTransaction.self).filter(predicate)
     }
 }

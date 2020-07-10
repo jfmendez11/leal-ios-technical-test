@@ -12,8 +12,8 @@ class TransactionInfoViewController: UIViewController {
     
     //MARK: Properties
     /// Regarding transacitions
-    var transactionInfoDataManager = DataManager<TransactionInfo>()
-    var transactionInfo: TransactionInfo?
+    private var transactionInfoDataManager = DataManager<TransactionInfo>()
+    private var transactionInfo: TransactionInfo?
     var transaction: RealmTransaction?
     
     /// Regarding the user

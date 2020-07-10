@@ -11,9 +11,9 @@ import UIKit
 class LoginViewController: UIViewController {
     
     //MARK: Properties
-    var userDataManager = DataManager<[User]>()
-    var users: [User] = []
-    var selectedUser: User?
+    private var userDataManager = DataManager<[User]>()
+    private var users: [User] = []
+    private var selectedUser: User?
     
     //MARK: Outlets
     @IBOutlet weak var iOSTechTestLabel: UILabel!

@@ -98,9 +98,4 @@ struct K {
         static let cornerRadiusToCircle: CGFloat = 0.5
         static let profileImageBorderWidth: CGFloat = 4
     }
-    
-    /// User defaults Keys
-    struct UserDefaultsKeys {
-        static let selectedUser = "CurrentUserId"
-    }
 }

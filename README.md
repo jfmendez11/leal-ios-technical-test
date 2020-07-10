@@ -1,2 +1,2 @@
-# leal-ios-technical-test
-Technical test for Leal
+# Leal iOS Technical Test
+

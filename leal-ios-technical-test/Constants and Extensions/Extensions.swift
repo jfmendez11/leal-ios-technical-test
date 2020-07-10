@@ -39,7 +39,7 @@ extension Array {
     }
 }
 
-//MARK: ImageView Ectension
+//MARK: ImageView Extension
 extension UIImageView {
     /// Create a custimized circular image, with brand's color border
     func generateCirledImage(from data: Data?) {
@@ -51,21 +51,6 @@ extension UIImageView {
             self.layer.borderColor = K.ColorPelette.brandYellow.cgColor
             self.layer.borderWidth = K.Multipliers.profileImageBorderWidth
         }
-    }
-}
-
-//MARK: UINavigationItem Extension
-extension UINavigationItem {
-    /// Make the title fit in the NavigationController
-    func setTitleLabel(with text: String) {
-        let label = UILabel()
-        label.backgroundColor = .clear
-        label.numberOfLines = 0
-        label.textColor = K.ColorPelette.brandYellow
-        label.font = UIFont.boldSystemFont(ofSize: 16.0)
-        label.textAlignment = .center
-        label.text = text
-        self.titleView = label
     }
 }
 
@@ -88,6 +73,7 @@ extension UINavigationBar {
     }
 }
 
+//MARK: - UIView Extension
 extension UIView {
     /// Standatd animation used across the app
     func showContentAnimation(animations: (() -> (Void))? ) {
@@ -100,7 +86,10 @@ extension UIView {
     }
 }
 
+
+//MARK: - NSMutableAttributedString Extension
 extension NSMutableAttributedString {
+    /// Format string for the card view
     var fontSize:CGFloat { return K.cardLabelFontSize }
     var boldFont:UIFont { return UIFont(name: "AvenirNext-Bold", size: fontSize) ?? UIFont.boldSystemFont(ofSize: fontSize) }
     var normalFont:UIFont { return UIFont(name: "AvenirNext-Regular", size: fontSize) ?? UIFont.systemFont(ofSize: fontSize)}

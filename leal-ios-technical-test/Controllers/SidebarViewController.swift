@@ -12,10 +12,10 @@ class SidebarViewController: UIViewController {
     
     //MARK: - Properties
     var selectedUser: User?
-    var sidebarItems = ["Cambiar de usuario"]
-    var sidebarIcons = [K.logoutIcon]
+    private var sidebarItems = ["Cambiar de usuario"]
+    private var sidebarIcons = [K.logoutIcon]
     
-    let activityIndicator = UIActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
+    private let activityIndicator = UIActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
     
     //MARK: - Outlets
     @IBOutlet weak var profileImage: UIImageView!
