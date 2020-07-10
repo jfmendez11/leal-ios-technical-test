@@ -78,7 +78,7 @@ struct K {
     
     /// Color palette for the app
     struct ColorPelette {
-        static let brandYellow = #colorLiteral(red: 0.8257568479, green: 0.6739847064, blue: 0, alpha: 1)
+        static let brandYellow = #colorLiteral(red: 1, green: 0.8384620547, blue: 0, alpha: 1)
         static let grey = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
         static let black = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
     }
