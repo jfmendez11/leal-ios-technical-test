@@ -14,7 +14,7 @@ class TransactionInfoViewController: UIViewController {
     /// Regarding transacitions
     var transactionInfoDataManager = DataManager<TransactionInfo>()
     var transactionInfo: TransactionInfo?
-    var transaction: Transaction?
+    var transaction: RealmTransaction?
     
     /// Regarding the user
     var user: User?

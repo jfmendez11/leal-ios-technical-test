@@ -7,13 +7,18 @@
 //
 
 import UIKit
+import RealmSwift
 
 class TransacitonsViewController: UITableViewController {
     
     //MARK: Properties
     /// Regarding the transactions
     var transactionsDataManager = DataManager<[Transaction]>()
-    var transactions: [Transaction] = []
+    //var transactions: [Transaction] = []
+    
+    // Realm
+    var localTransactions: Results<RealmTransaction>?
+    let realm = try! Realm()
     
     /// Regarding the users
     var users: [Int:User]?
@@ -24,6 +29,7 @@ class TransacitonsViewController: UITableViewController {
     //MARK: LifeCycle Methods
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         /// Initial  setup
         overrideUserInterfaceStyle = .light
         tableView.separatorStyle = .none
@@ -42,14 +48,23 @@ class TransacitonsViewController: UITableViewController {
         title = "Transacciones de \(selectedUser?.name ?? "todos los usuarios")"
         navigationController?.navigationBar.setupNavigationMultilineTitle(with: "Transacciones de \(selectedUser?.name ?? "todos los usuarios")")
         
-        /// Fetch the user's transactions if there's a selected user - if not, fetch all the transactions
-        if let userId = selectedUser?.id {
-            // GET: /users/{userId}/transactions
-            transactionsDataManager.fetchData(from: "users/\(userId)/transactions")
-        } else {
-            // GET: /transactions
+        loadTransactions()
+
+        if localTransactions?.count == 0 {
             transactionsDataManager.fetchData(from: "transactions")
+        } else {
+            tableView.reloadData()
+            activityIndicator.stopAnimating()
         }
+        
+        /// Fetch the user's transactions if there's a selected user - if not, fetch all the transactions
+        //        if let userId = selectedUser?.id {
+        //            // GET: /users/{userId}/transactions
+        //            transactionsDataManager.fetchData(from: "users/\(userId)/transactions")
+        //        } else {
+        //            // GET: /transactions
+        //            transactionsDataManager.fetchData(from: "transactions")
+        //        }
         
         /// Register custom cells
         tableView.register(UINib(nibName: K.cellNibName, bundle: nil), forCellReuseIdentifier: K.transactionCell)
@@ -67,36 +82,68 @@ class TransacitonsViewController: UITableViewController {
         // FIXME: Cache rollback to network
         activityIndicator.startAnimating()
         navigationItem.rightBarButtonItem?.isEnabled = false
-        if let userId = selectedUser?.id {
-            // GET: /users/{userId}/transactions
-            transactionsDataManager.fetchData(from: "users/\(userId)/transactions")
-        } else {
-            transactionsDataManager.fetchData(from: "transactions")
-        }
+        let transactions = realm.objects(RealmTransaction.self)
+            transactions.forEach { transaction in
+                do {
+                    try realm.write {
+                        transaction.deleted = false
+                        transaction.read = false
+                    }
+                } catch {
+                    print("error reloading \(error)")
+                }
+            }
+            activityIndicator.stopAnimating()
+            tableView.showContentAnimation {
+                self.tableView.separatorStyle = .singleLine
+                self.tableView.reloadData()
+            }
+//        if let userId = selectedUser?.id {
+//            // GET: /users/{userId}/transactions
+//            transactionsDataManager.fetchData(from: "users/\(userId)/transactions")
+//        } else {
+//            transactionsDataManager.fetchData(from: "transactions")
+//        }
     }
     
     @objc private func sideBarMenuPressed() {
         performSegue(withIdentifier: K.goToSidebar, sender: self)
     }
     
+    //MARK: - Realm methods
+    func loadTransactions() {
+        tableView.separatorStyle = .singleLine
+        var predicate = "deleted == false"
+        if realm.objects(RealmTransaction.self).filter("deleted == true OR read == true").first != nil {
+            navigationItem.rightBarButtonItem?.isEnabled = true
+        }
+        if let userId = selectedUser?.id {
+            predicate += " && userId == \(userId)"
+        }
+        localTransactions = realm.objects(RealmTransaction.self).filter(predicate)
+    }
     
     // MARK: - Table view data source
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return transactions.count > 0 ? transactions.count + 1 : 0
+        let count = localTransactions?.count ?? 0
+        return count > 0 ? count + 1 : 0
     }
     
     /// Setup cells info to display
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if let transactions = localTransactions {
         if indexPath.row < transactions.count {
-            let transaciton = transactions[indexPath.row]
+            let transaction = transactions[indexPath.row]
             
             let cell = tableView.dequeueReusableCell(withIdentifier: K.transactionCell, for: indexPath) as! TransactionCell
             
-            cell.readImage.tintColor = transaciton.read ? K.ColorPelette.grey : K.ColorPelette.brandYellow
-            cell.commerceNameLabel.text = transaciton.commerce.name
-            cell.commerceBranchNameLabel.text = transaciton.branch.name
-            cell.createdDateLabel.text = transaciton.createdDate.formatDateFromSelf(to: K.DateFormats.fullMonthWithRegularDayAndYear)
-            if let unwrappedUsers = users, let user = unwrappedUsers[transaciton.userId] {
+            cell.isHidden = transaction.deleted
+            
+            cell.readImage.tintColor = transaction.read ? K.ColorPelette.grey : K.ColorPelette.brandYellow
+            cell.commerceNameLabel.text = transaction.commerce.name
+            cell.commerceBranchNameLabel.text = transaction.branch.name
+            cell.createdDateLabel.text = transaction.createdDate.formatDateFromSelf(to: K.DateFormats.fullMonthWithRegularDayAndYear)
+            if let unwrappedUsers = users, let user = unwrappedUsers[transaction.userId] {
                 cell.userNameLabel.text = user.name
             }
             cell.userNameLabel.isHidden = selectedUser != nil
@@ -112,13 +159,16 @@ class TransacitonsViewController: UITableViewController {
             cell.accessoryView?.tintColor = .white
             return cell
         }
+        }
+        return UITableViewCell()
     }
     
     
     // MARK: - Table view delegate
     /// Return the height deppending of the selected user and the delete button
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.row < transactions.count {
+        let count = localTransactions?.count ?? 0
+        if indexPath.row < count {
             return selectedUser != nil ? K.transactionCellHeightSingleUser : K.transactionCellHeightAllUsers
         } else {
             return K.deleteAllCellHeight
@@ -127,26 +177,47 @@ class TransacitonsViewController: UITableViewController {
     
     /// Perform segue if a user clicks a transaction or delete everyting if he clicks on delete cell
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.row < transactions.count {
-            navigationItem.rightBarButtonItem?.isEnabled = true
+        if let transactions = localTransactions {
+            let count = transactions.count
+        if indexPath.row < count {
             
-            transactions[indexPath.row].read = true
+            navigationItem.rightBarButtonItem?.isEnabled = true
+            do {
+                try realm.write {
+                    transactions[indexPath.row].read = true
+                }
+            } catch {
+                print("Error saving read status, \(error)")
+            }
             
             performSegue(withIdentifier: K.toTransactionInfo, sender: self)
+            
         } else {
-            transactions = []
+//            transactions = []
+            navigationItem.rightBarButtonItem?.isEnabled = true
+            transactions.forEach { transaction in
+                do {
+                    try realm.write {
+                        transaction.deleted = true
+                    }
+                } catch {
+                    print("Error saving read status, \(error)")
+                }
+            }
             
             tableView.showContentAnimation {
                 self.tableView.separatorStyle = .none
                 self.tableView.reloadData()
             }
         }
+        }
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
     /// Make editable only the transaction cells
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        if indexPath.row < transactions.count {
+        let count = localTransactions?.count ?? 0
+        if indexPath.row < count {
             return true
         } else {
             return false
@@ -158,8 +229,15 @@ class TransacitonsViewController: UITableViewController {
         if editingStyle == .delete {
             navigationItem.rightBarButtonItem?.isEnabled = true
             
-            transactions.remove(at: indexPath.row)
-            
+            if let transaction = localTransactions?[indexPath.row] {
+                do {
+                    try realm.write {
+                        transaction.deleted = true
+                    }
+                } catch {
+                    print("Error saving read status, \(error)")
+                }
+            }
             tableView.deleteRows(at: [indexPath], with: .fade)
         }
     }
@@ -170,13 +248,15 @@ class TransacitonsViewController: UITableViewController {
         if segue.identifier == K.toTransactionInfo {
             let destinationVC = segue.destination as! TransactionInfoViewController
             if let indexPath = tableView.indexPathForSelectedRow {
-                let transaction = transactions[indexPath.row]
+                if let transaction = localTransactions?[indexPath.row] {
                 destinationVC.transaction = transaction
+                
                 if let user = selectedUser {
                     destinationVC.user = user
                 }
                 else if let user = users?[transaction.userId] {
                     destinationVC.user = user
+                }
                 }
             }
         } else if segue.identifier == K.goToSidebar {
@@ -193,10 +273,45 @@ extension TransacitonsViewController: DataDelegate {
     
     /// Delegate method to handle data changes from API requests
     func didUpdateData(model: Codable) {
-        if let transactionsArray = model as? [Transaction] {
-            transactions = transactionsArray
-        }
+        
         DispatchQueue.main.async {
+            if let transactionsArray = model as? [Transaction] {
+                //            transactions = transactionsArray
+                transactionsArray.forEach {
+                    
+                    let newTransaction = RealmTransaction()
+                    newTransaction.id = $0.id
+                    newTransaction.userId = $0.userId
+                    newTransaction.createdDate = $0.createdDate
+                    
+                    if let commerce = self.realm.objects(RealmCommerce.self).filter("id = \($0.commerce.id)").first {
+                        newTransaction.commerce = commerce
+                    } else {
+                    let newCommerce = RealmCommerce()
+                    newCommerce.id = $0.commerce.id
+                    newCommerce.name = $0.commerce.name
+                        newTransaction.commerce = newCommerce
+                    }
+                    
+                    if let branch = self.realm.objects(RealmBranch.self).filter("id = \($0.branch.id)").first {
+                        newTransaction.branch = branch
+                    } else {
+                        let newBranch = RealmBranch()
+                    newBranch.id = $0.branch.id
+                    newBranch.name = $0.branch.name
+                    
+                    newTransaction.branch = newBranch
+                    }
+                    
+                    do {
+                        try self.realm.write {
+                            self.realm.add(newTransaction)
+                        }
+                    } catch {
+                        print("Error saving transaction \(error)")
+                    }
+                }
+            }
             self.activityIndicator.stopAnimating()
             self.tableView.showContentAnimation {
                 self.tableView.separatorStyle = .singleLine
